@@ -1,0 +1,18 @@
+[programs.localnet]
+hangman_program = "FMUgWojverbaoVHq1tkLf9xxFe1eusyN4AjJQ1GBBx4A"
+
+[programs.devnet]
+hangman_program = "FMUgWojverbaoVHq1tkLf9xxFe1eusyN4AjJQ1GBBx4A"
+
+[programs.mainnet]
+hangman_program = "FMUgWojverbaoVHq1tkLf9xxFe1eusyN4AjJQ1GBBx4A"
+
+[registry]
+url = "https://anchor.projectserum.com"
+
+[provider]
+cluster = "devnet"
+wallet = "/Users/williamsuratt/.config/solana/id.json"
+
+[scripts]
+test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
