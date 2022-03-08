@@ -69,7 +69,7 @@ pub mod hangman_program {
             let lamports = 100000000 as f64;
 
             pool.win += 1;
-            let win_amount: u64 = (((losses/wins) * lamports) * 0.5) as u64;
+            let win_amount: u64 = ((((losses/wins) * lamports) * 0.8) + lamports) as u64;
             **from_account.try_borrow_mut_lamports()? -= win_amount;
             **to_account.try_borrow_mut_lamports()? += win_amount;
         }
