@@ -16,8 +16,8 @@ pub mod hangman_program {
 
     pub fn wager(ctx: Context<Wager>) -> ProgramResult {
         let owner: &Signer = &ctx.accounts.owner;
-        let pool_amount: u64 = 100000000;
-        let fee_amount: u64 = 10000000;
+        let pool_amount: u64 = 1000000;//add two 0s
+        let fee_amount: u64 = 100000;//add two 0s
         let target_word: String = String::from("********");
         let word: String = String::from("********");
 
@@ -66,7 +66,7 @@ pub mod hangman_program {
         {
             let wins = pool.win as f64;
             let losses = pool.loss as f64;
-            let lamports = 100000000 as f64;
+            let lamports = 1000000 as f64;//add two 0s
 
             pool.win += 1;
             let win_amount: u64 = ((((losses/wins) * lamports) * 0.8) + lamports) as u64;
@@ -84,7 +84,7 @@ pub mod hangman_program {
 #[derive(Accounts)]
 #[instruction(pool_bump: u8)]
 pub struct Initialize<'info> {
-    #[account(init, seeds = [b"hangman_test".as_ref()], bump = pool_bump, payer = owner)]
+    #[account(init, seeds = [b"hangman_solwager".as_ref()], bump = pool_bump, payer = owner)]
     pool: Account<'info, Pool>,
     pub owner: Signer<'info>,
     pub system_program: Program<'info, System>,
@@ -96,14 +96,14 @@ pub struct Wager<'info> {
     pub owner: Signer<'info>,
     #[account(mut, address = Pubkey::from_str("8WnqfBUM4L13fBUudvjstHBEmUcxTPPX7DGkg3iyMmc8").unwrap())]
     pub admin: AccountInfo<'info>,
-    #[account(mut, seeds = [b"hangman_test".as_ref()], bump = pool.bump)]
+    #[account(mut, seeds = [b"hangman_solwager".as_ref()], bump = pool.bump)]
     pub pool: Account<'info, Pool>,
     pub system_program: Program<'info, System>,
 }
 
 #[derive(Accounts)]
 pub struct EndGame<'info> {
-    #[account(mut, seeds = [b"hangman_test".as_ref()], bump = pool.bump)]
+    #[account(mut, seeds = [b"hangman_solwager".as_ref()], bump = pool.bump)]
     pub pool: Account<'info, Pool>,
     #[account(mut)]
     pub owner: AccountInfo<'info>,

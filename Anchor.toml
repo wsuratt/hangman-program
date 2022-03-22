@@ -11,7 +11,7 @@ hangman_program = "FMUgWojverbaoVHq1tkLf9xxFe1eusyN4AjJQ1GBBx4A"
 url = "https://anchor.projectserum.com"
 
 [provider]
-cluster = "devnet"
+cluster = "mainnet"
 wallet = "/Users/williamsuratt/.config/solana/id.json"
 
 [scripts]
