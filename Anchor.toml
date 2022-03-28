@@ -1,11 +1,11 @@
 [programs.localnet]
-hangman_program = "FMUgWojverbaoVHq1tkLf9xxFe1eusyN4AjJQ1GBBx4A"
+hangman_program = "8VxWJzmYtVrC755tFjQGMLhAN3hgPfCNPReEtN3wBzYz"
 
 [programs.devnet]
-hangman_program = "FMUgWojverbaoVHq1tkLf9xxFe1eusyN4AjJQ1GBBx4A"
+hangman_program = "8VxWJzmYtVrC755tFjQGMLhAN3hgPfCNPReEtN3wBzYz"
 
 [programs.mainnet]
-hangman_program = "FMUgWojverbaoVHq1tkLf9xxFe1eusyN4AjJQ1GBBx4A"
+hangman_program = "8VxWJzmYtVrC755tFjQGMLhAN3hgPfCNPReEtN3wBzYz"
 
 [registry]
 url = "https://anchor.projectserum.com"
