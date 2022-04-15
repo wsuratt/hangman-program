@@ -18,7 +18,7 @@ pub mod hangman_program {
     pub fn wager(ctx: Context<Wager>) -> ProgramResult {
         let owner: &Signer = &ctx.accounts.owner;
         let pool_amount: u64 = 50000000;
-        let fee_amount: u64 = 10000000;
+        // let fee_amount: u64 = 10000000;
         let target_word: String = String::from("********");
         let word: String = String::from("********");
 
@@ -37,18 +37,18 @@ pub mod hangman_program {
         );
 
         // fee
-        let ix = anchor_lang::solana_program::system_instruction::transfer(
-            &ctx.accounts.owner.key(), // from
-            &ctx.accounts.admin.key(), // to
-            fee_amount,
-        );
-        anchor_lang::solana_program::program::invoke(
-            &ix,
-            &[
-                ctx.accounts.owner.to_account_info(), //from
-                ctx.accounts.admin.to_account_info(), //to
-            ],
-        );
+        // let ix = anchor_lang::solana_program::system_instruction::transfer(
+        //     &ctx.accounts.owner.key(), // from
+        //     &ctx.accounts.admin.key(), // to
+        //     fee_amount,
+        // );
+        // anchor_lang::solana_program::program::invoke(
+        //     &ix,
+        //     &[
+        //         ctx.accounts.owner.to_account_info(), //from
+        //         ctx.accounts.admin.to_account_info(), //to
+        //     ],
+        // );
 
         Ok(())
     }
@@ -56,7 +56,8 @@ pub mod hangman_program {
     pub fn end_game(ctx: Context<EndGame>, won: bool) -> ProgramResult {
         let pool: &mut Account<Pool> = &mut ctx.accounts.pool;
         let from_account = pool.to_account_info();
-        let to_account = ctx.accounts.owner.to_account_info();
+        let player_account = ctx.accounts.owner.to_account_info();
+        let admin_account = ctx.accounts.admin.to_account_info();
 
         // if **from_account.try_borrow_lamports()? < amount_of_lamports {
         //     return Err(ErrorCode::ContentTooLong.into());
@@ -70,9 +71,14 @@ pub mod hangman_program {
             let lamports = 50000000 as f64;
 
             pool.win += 1;
-            let win_amount: u64 = ((((losses/wins) * lamports) * 0.8) + lamports) as u64;
+            let fee_amount: u64 = ((((losses/wins) * lamports) * 0.8) * 0.1) as u64;
+            let win_amount: u64 = (((((losses/wins) * lamports) * 0.8) + lamports) - fee_amount as f64) as u64;
             **from_account.try_borrow_mut_lamports()? -= win_amount;
-            **to_account.try_borrow_mut_lamports()? += win_amount;
+            **player_account.try_borrow_mut_lamports()? += win_amount;
+
+            // fees
+            **from_account.try_borrow_mut_lamports()? -= fee_amount;
+            **admin_account.try_borrow_mut_lamports()? += fee_amount;
         }
         else
         {
@@ -95,8 +101,8 @@ pub struct Initialize<'info> {
 pub struct Wager<'info> {
     #[account(mut)]
     pub owner: Signer<'info>,
-    #[account(mut, address = Pubkey::from_str("8WnqfBUM4L13fBUudvjstHBEmUcxTPPX7DGkg3iyMmc8").unwrap())]
-    pub admin: AccountInfo<'info>,
+    // #[account(mut, address = Pubkey::from_str("8WnqfBUM4L13fBUudvjstHBEmUcxTPPX7DGkg3iyMmc8").unwrap())]
+    // pub admin: AccountInfo<'info>,
     #[account(mut, seeds = [b"hangman_solwager".as_ref()], bump)]
     pub pool: Account<'info, Pool>,
     pub system_program: Program<'info, System>,
@@ -108,6 +114,8 @@ pub struct EndGame<'info> {
     pub pool: Account<'info, Pool>,
     #[account(mut)]
     pub owner: AccountInfo<'info>,
+    #[account(mut, address = Pubkey::from_str("8WnqfBUM4L13fBUudvjstHBEmUcxTPPX7DGkg3iyMmc8").unwrap())]
+    pub admin: AccountInfo<'info>,
     #[account(mut, address = Pubkey::from_str("8ECeRHmzdQKE3sBLZ5r8wAoEWfAVNEupJRu3EtkXvA4Q").unwrap())]
     pub server: Signer<'info>,
     pub system_program: Program<'info, System>,
